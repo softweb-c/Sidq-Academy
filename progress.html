@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidq Academy | Progress Analytics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    body { background: #D1D5DB; }
+  </style>
+</head>
+<body>
+   <nav id="mainNavbar" class="sticky top-0 z-30 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-6">
+          <a href="/index.html" class="text-2xl font-bold text-[#2563EB] flex items-center gap-2">
+            <i class="fas fa-graduation-cap"></i> Sidq Academy
+        </a>
+          <div class="hidden md:flex gap-4">
+            <a href="/index.html" class="text-gray-700 hover:text-[#2563EB]">Discovery</a>
+            <a href="/progress.html" class="text-gray-700 hover:text-[#2563EB] font-medium">Analytics</a>
+            <a href="/admin.html" id="adminNavLink" class="hidden text-gray-700 hover:text-[#2563EB]">Admin Panel</a>
+          </div>
+        </div>
+        <div class="relative" id="profileDropdownBtn">
+          <button id="profileBtn" class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full shadow-sm"><i class="fas fa-user-circle text-xl text-[#2563EB]"></i><span id="userEmailDisplay" class="text-sm font-medium">Account</span><i class="fas fa-chevron-down text-xs"></i></button>
+          <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border hidden"><div class="px-4 py-2 border-b"><p id="dropdownUserEmail" class="text-xs text-gray-500"></p></div><button id="logoutBtn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"><i class="fas fa-sign-out-alt"></i> Logout</button></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+     
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="progressGrid">
+      <!-- cards injected -->
+    </div>
+  </main>
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+   <!-- Footer -->
+<footer class="bg-white border-t border-gray-200 mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Logo & tagline -->
+      <div class="col-span-1">
+        <div class="flex items-center gap-2 mb-4">
+          <i class="fas fa-graduation-cap text-2xl text-[#2563EB]"></i>
+          <span class="text-xl font-bold text-[#2563EB]">Sidq Academy</span>
+        </div>
+        <p class="text-gray-600 text-sm">Empowering lifelong learning through quality courses.</p>
+        <div class="flex gap-4 mt-4">
+          <a href="#" class="text-gray-400 hover:text-[#2563EB] transition"><i class="fab fa-twitter text-lg"></i></a>
+          <a href="#" class="text-gray-400 hover:text-[#2563EB] transition"><i class="fab fa-linkedin-in text-lg"></i></a>
+          <a href="#" class="text-gray-400 hover:text-[#2563EB] transition"><i class="fab fa-github text-lg"></i></a>
+          <a href="#" class="text-gray-400 hover:text-[#2563EB] transition"><i class="fab fa-youtube text-lg"></i></a>
+        </div>
+      </div>
+      <!-- Quick Links -->
+      <div>
+        <h3 class="font-semibold text-gray-800 mb-4">Platform</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/index.html" class="text-gray-600 hover:text-[#2563EB]">Discovery</a></li>
+          <li><a href="/progress.html" class="text-gray-600 hover:text-[#2563EB]">Analytics</a></li>
+          <li><a href="/admin.html" id="footerAdminLink" class="text-gray-600 hover:text-[#2563EB] hidden">Admin Panel</a></li>
+          <li><a href="#" class="text-gray-600 hover:text-[#2563EB]">Pricing</a></li>
+        </ul>
+      </div>
+      <!-- Resources -->
+      <div>
+        <h3 class="font-semibold text-gray-800 mb-4">Resources</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="text-gray-600 hover:text-[#2563EB]">Help Center</a></li>
+          <li><a href="#" class="text-gray-600 hover:text-[#2563EB]">Blog</a></li>
+          <li><a href="#" class="text-gray-600 hover:text-[#2563EB]">Community</a></li>
+          <li><a href="#" class="text-gray-600 hover:text-[#2563EB]">Support</a></li>
+        </ul>
+      </div>
+      <!-- Contact / Newsletter -->
+      <div>
+        <h3 class="font-semibold text-gray-800 mb-4">Stay updated</h3>
+        <p class="text-sm text-gray-600 mb-3">Get the latest courses and news.</p>
+        <div class="flex">
+          <input type="email" placeholder="Your email" class="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-[#2563EB] text-sm">
+          <button class="bg-[#2563EB] text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition">Subscribe</button>
+        </div>
+        <p class="text-xs text-gray-400 mt-3">By subscribing you agree to our Terms.</p>
+      </div>
+    </div>
+    <div class="border-t border-gray-200 mt-10 pt-6 text-center text-sm text-gray-500">
+      © 2026 Sidq Academy. All rights reserved. Built with <i class="fas fa-heart text-red-500"></i> for lifelong learners.
+    </div>
+  </div>
+</footer>
+
+  <script src="/js/mockApi.js"></script>
+  <script src="/js/components.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/progress.js"></script>
+</body>
+</html>

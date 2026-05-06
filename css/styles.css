@@ -1,0 +1,28 @@
+/* simple custom overrides - tailwind already covers most */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+/* subtle smooth scaling */
+.course-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+/* Custom focus ring */
+*:focus { outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3); }
+/* Card glow effect on hover */
+.course-card:hover { box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2); }
+/* Hide scrollbar but keep functionality already in use */
+/* Glass navbar when scrolled */
+/* Glass navbar when scrolled – more transparent */
+.navbar-scrolled {
+  background: rgba(255, 255, 255, 0.15) !important;   /* 40% opacity – more see‑through */
+  backdrop-filter: blur(20px) !important;            /* stronger blur for a true glass look */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Optional: adjust text colors when scrolled if needed */
+.navbar-scrolled .text-gray-700 {
+  color: #1f2937; /* keep dark, but you can tweak */
+}
