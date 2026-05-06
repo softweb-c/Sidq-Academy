@@ -1,4 +1,4 @@
-// mockApi.js – fixed login rejection and seeding
+// mockApi.js – with manual image mapping per course (Option 2)
 const STORAGE_KEYS = {
   USERS: 'app_users',
   COURSES: 'app_courses',
@@ -14,24 +14,56 @@ function seedInitialData() {
     ];
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
   }
+  
   // Courses (15 realistic)
   if (!localStorage.getItem(STORAGE_KEYS.COURSES)) {
     const courses = [];
-    const titles = ['React Mastery', 'Python for Data', 'UI/UX Fundamentals', 'Node.js Backend', 'Machine Learning A-Z', 'Figma to Code', 'SQL Database Design', 'Cloud Computing Intro', 'JavaScript Deep Dive', 'Data Visualization', 'Responsive Design', 'AI Basics', 'Cybersecurity', 'DevOps Pipeline', 'Mobile Flutter'];
+    const titles = [
+      'React Mastery', 'Python for Data', 'UI/UX Fundamentals', 'Node.js Backend',
+      'Machine Learning A-Z', 'Figma to Code', 'SQL Database Design', 'Cloud Computing Intro',
+      'JavaScript Deep Dive', 'Data Visualization', 'Responsive Design', 'AI Basics',
+      'Cybersecurity', 'DevOps Pipeline', 'Mobile Flutter'
+    ];
+    
+    // ---------- MANUAL IMAGE MAPPING (edit these filenames as you like) ----------
+    // Map each course ID (c1..c15) to the exact image filename in /assets/course-images/
+    const imageMapping = {
+      c1: 'c1.jpg',
+      c2: 'c2.jpg',
+      c3: 'c3.jpg',
+      c4: 'c4.jpg',
+      c5: 'c5.jpg',
+      c6: 'c3.jpg',
+      c7: 'c13.jpg',
+      c8: 'c9.jpg',
+      c9: 'c6.jpg',
+      c10: 'c7.jpg',
+      c11: 'c8.jpg',
+      c12: 'c10.jpg',
+      c13: 'c11.jpg',
+      c14: 'c12.jpg',
+      c15: 'c8.jpg'
+    };
+    // ----------------------------------------------------------------------------
+    
     for (let i = 0; i < 15; i++) {
+      const courseId = `c${i+1}`;
+      const imageFile = imageMapping[courseId] || 'default.jpg'; // fallback
+      
       courses.push({
-        id: `c${i+1}`,
+        id: courseId,
         title: titles[i],
         description: `Learn ${titles[i]} step by step.`,
         category: ['Web Dev', 'Data Science', 'Design'][i % 3],
         difficulty: ['Beginner', 'Intermediate', 'Advanced'][i % 3],
-        imageUrl: `/assets/course-images/${id}.jpg`,
+        imageUrl: `/assets/course-images/${imageFile}`,
         featured: i === 0,
         estimatedHours: 5 + (i % 15)
       });
     }
     localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(courses));
   }
+  
   // User enrollments (demo for user@sidq.com)
   if (!localStorage.getItem(STORAGE_KEYS.USER_COURSES)) {
     const enrollments = [];
@@ -130,7 +162,7 @@ const mockApi = {
     localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(courses));
     resolve();
   }),
-    getPlatformStats: () => new Promise(resolve => {
+  getPlatformStats: () => new Promise(resolve => {
     const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS));
     const courses = JSON.parse(localStorage.getItem(STORAGE_KEYS.COURSES));
     const enrollments = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_COURSES));
@@ -138,7 +170,6 @@ const mockApi = {
     const totalCourses = courses.length;
     const totalEnrollments = enrollments.length;
     const totalCompletions = enrollments.filter(e => e.status === 'completed').length;
-    // Most popular courses (by completions)
     const courseCompletionCount = {};
     enrollments.forEach(e => {
       if (e.status === 'completed') {
@@ -158,7 +189,6 @@ const mockApi = {
     resolve(distribution);
   }),
   getDailyActiveUsers: () => new Promise(resolve => {
-    // Mock: last 7 days activity (random for demo)
     const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const counts = days.map(() => Math.floor(Math.random() * 50) + 10);
     resolve({ days, counts });
