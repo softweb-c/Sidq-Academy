@@ -25,7 +25,7 @@ function seedInitialData() {
         description: `Learn ${titles[i]} step by step.`,
         category: ['Web Dev', 'Data Science', 'Design'][i % 3],
         difficulty: ['Beginner', 'Intermediate', 'Advanced'][i % 3],
-        imageUrl: `/assets/course-images/c${(i % 3) + 1}.jpg`,
+        imageUrl: `/assets/course-images/${id}.jpg`,
         featured: i === 0,
         estimatedHours: 5 + (i % 15)
       });
