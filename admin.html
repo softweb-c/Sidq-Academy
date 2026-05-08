@@ -13,48 +13,85 @@
   </style>
 </head>
 <body>
-   <nav id="mainNavbar" class="sticky top-0 z-30 transition-all duration-300">
+  <nav id="mainNavbar" class="sticky top-0 z-30 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <div class="flex items-center gap-6">
-          <a href="/index.html" class="text-2xl font-bold text-[#2563EB] flex items-center gap-2">
+          <a href="/admin.html" class="text-2xl font-bold text-[#2563EB] flex items-center gap-2">
             <i class="fas fa-graduation-cap"></i> Sidq Academy
-        </a>
+          </a>
           <div class="hidden md:flex gap-4">
-            <a href="/index.html" class="text-gray-700 hover:text-[#2563EB]">Discovery</a>
+            <a href="/admin.html" class="text-[#2563EB] font-semibold">Course Manager</a>
             <a href="/progress.html" class="text-gray-700 hover:text-[#2563EB] font-medium">Analytics</a>
-            <a href="/admin.html" class="text-[#2563EB] font-semibold">Admin Panel</a>
           </div>
         </div>
         <div class="relative" id="profileDropdownBtn">
-          <button id="profileBtn" class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full shadow-sm"><i class="fas fa-user-circle text-xl text-[#2563EB]"></i><span id="userEmailDisplay" class="text-sm font-medium">Admin</span><i class="fas fa-chevron-down text-xs"></i></button>
-          <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border hidden"><div class="px-4 py-2 border-b"><p id="dropdownUserEmail" class="text-xs text-gray-500"></p></div><button id="logoutBtn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"><i class="fas fa-sign-out-alt"></i> Logout</button></div>
+          <button id="profileBtn" class="flex items-center gap-2 bg-gray-50/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm border border-gray-200/50">
+            <i class="fas fa-user-circle text-xl text-[#2563EB]"></i>
+            <span id="userEmailDisplay" class="text-sm font-medium text-gray-700">Admin</span>
+            <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+          </button>
+          <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white/90 backdrop-blur-md rounded-xl shadow-lg border hidden z-50 overflow-hidden">
+            <div class="px-4 py-2 border-b bg-gray-50/50"><p id="dropdownUserEmail" class="text-xs text-gray-500 truncate"></p></div>
+            <button id="logoutBtn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-sign-out-alt"></i> Logout</button>
+          </div>
         </div>
       </div>
     </div>
   </nav>
+
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Quick Stats Row (admin dashboard summary) -->
+    <div id="heroSection" class="mb-6"></div>
+    <div id="adminStatsGrid" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <div id="welcomeSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4"></div>
+  <!-- stats will be injected by admin.js -->
+</div>
+
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold text-gray-800">📚 Course Management</h1>
       <button id="openAddModalBtn" class="bg-[#2563EB] text-white px-5 py-2 rounded-xl shadow-md hover:bg-blue-700 transition flex items-center gap-2"><i class="fas fa-plus"></i> Add Course</button>
     </div>
     <div class="bg-white rounded-2xl shadow overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200" id="adminCoursesTable">
-        <thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th><th>Category</th><th>Difficulty</th><th>Actions</th></tr></thead>
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Difficulty</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+          </tr>
+        </thead>
         <tbody id="adminTableBody"></tbody>
       </table>
     </div>
   </main>
+
   <!-- Add/Edit Modal -->
   <div id="courseModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
       <h2 id="modalTitle" class="text-xl font-bold mb-4">Add Course</h2>
       <input type="hidden" id="editCourseId">
-      <div class="space-y-3"><input id="courseTitle" placeholder="Course Title" class="w-full border rounded-lg p-2"><input id="courseDesc" placeholder="Description" class="w-full border rounded-lg p-2"><input id="courseCategory" placeholder="Category (Web Dev / Data Science / Design)" class="w-full border rounded-lg p-2"><select id="courseDifficulty" class="w-full border rounded-lg p-2"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select><input id="courseImageUrl" placeholder="Image URL (picsum)" class="w-full border rounded-lg p-2"></div>
-      <div class="flex justify-end gap-3 mt-6"><button id="closeModalBtn" class="px-4 py-2 border rounded-lg">Cancel</button><button id="saveCourseBtn" class="bg-[#2563EB] text-white px-4 py-2 rounded-lg">Save</button></div>
+      <div class="space-y-3">
+        <input id="courseTitle" placeholder="Course Title" class="w-full border rounded-lg p-2">
+        <input id="courseDesc" placeholder="Description" class="w-full border rounded-lg p-2">
+        <input id="courseCategory" placeholder="Category (Web Dev / Data Science / Design)" class="w-full border rounded-lg p-2">
+        <select id="courseDifficulty" class="w-full border rounded-lg p-2">
+          <option>Beginner</option>
+          <option>Intermediate</option>
+          <option>Advanced</option>
+        </select>
+        <input id="courseImageUrl" placeholder="Image URL" class="w-full border rounded-lg p-2">
+      </div>
+      <div class="flex justify-end gap-3 mt-6">
+        <button id="closeModalBtn" class="px-4 py-2 border rounded-lg">Cancel</button>
+        <button id="saveCourseBtn" class="bg-[#2563EB] text-white px-4 py-2 rounded-lg">Save</button>
+      </div>
     </div>
   </div>
+
   <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
   <script src="/js/mockApi.js"></script>
   <script src="/js/components.js"></script>
   <script src="/js/auth.js"></script>

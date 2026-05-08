@@ -8,63 +8,17 @@
   const completedIds = userEnrollments.filter(e => e.status === 'completed').map(e => e.courseId);
   const enrolledIds = userEnrollments.map(e => e.courseId);
 
-  // Featured course
+  // ----- Hero Banner with integrated greeting (no separate welcome card) -----
   const featured = allCourses.find(c => c.featured === true);
-  // ----- Hero Section (Redesigned) -----
-const heroDiv = document.getElementById('heroSection');
-if (heroDiv && featured) {
-  heroDiv.innerHTML = `
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] shadow-2xl mb-12">
-      <!-- ...background shapes... -->
-      <div class="relative flex flex-col md:flex-row items-center justify-between p-8 md:p-12 gap-8">
-        <div class="flex-1 text-white">
-          <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm font-semibold backdrop-blur-sm mb-4">🌟 Featured Course</span>
-          <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight">${featured.title}</h1>
-          <p class="text-white/80 text-lg mb-6 max-w-2xl">${featured.description}</p>
-          <div class="flex flex-wrap gap-4 items-center">
-            <button id="heroStartBtn" class="group bg-white text-[#2563EB] px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
-              <i class="fas fa-play"></i> Start Learning
-              <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-            </button>
-            <div class="flex gap-4 text-sm">
-              <div class="flex items-center gap-1"><i class="fas fa-chart-line"></i> <span>15+ Courses</span></div>
-              <div class="flex items-center gap-1"><i class="fas fa-users"></i> <span>500+ Students</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="flex-1 flex justify-center">
-          <div class="relative w-48 h-48 md:w-64 md:h-64 bg-white/10 rounded-2xl backdrop-blur-sm flex items-center justify-center shadow-2xl border border-white/20">
-            <div id="heroLottie" style="width: 80%; height: 80%;"></div>
-            <div class="absolute -bottom-3 -right-3 bg-yellow-400 text-[#1E3A8A] rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold shadow-lg">⭐</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  // Load Lottie hero animation
-  const heroLottieContainer = document.getElementById('heroLottie');
-  if (heroLottieContainer) {
-    lottie.loadAnimation({
-      container: heroLottieContainer,
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: '/assets/hero-animation.json' // change to your file
-    });
-  }
-
-  // Attach hero button event listener (as before)
-  const heroBtn = document.getElementById('heroStartBtn');
+  const heroDiv = document.getElementById('heroSection');
+  if (heroDiv && featured && user && user.name) {
+    // Use the new renderFeaturedHero that includes the greeting inside the banner
+    heroDiv.innerHTML = renderFeaturedHero(user.name, featured);
+    // Attach hero button event listener
+    const heroBtn = document.getElementById('heroStartBtn');
     if (heroBtn) {
       heroBtn.addEventListener('click', async () => {
         const courseId = featured.id;
-        if (!courseId) {
-          showToast('Course ID missing – cannot start', 'error');
-          return;
-        }
-        // Store in sessionStorage as fallback for course.html
-        sessionStorage.setItem('pendingCourseId', courseId);
         const isEnrolled = enrolledIds.includes(courseId);
         if (!isEnrolled) {
           try {
@@ -75,12 +29,23 @@ if (heroDiv && featured) {
             return;
           }
         }
-        // Redirect to the course page with the ID in the URL
         window.location.href = `/course.html?id=${courseId}`;
+      });
+    }
+    // Load Lottie if available (optional)
+    const heroLottie = document.getElementById('heroLottie');
+    if (heroLottie && typeof lottie !== 'undefined') {
+      lottie.loadAnimation({
+        container: heroLottie,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '/assets/hero-animation.json'
       });
     }
   }
 
+  // ----- Recommendation Rows -----
   let lastCompletedName = 'a Course';
   if (completedIds.length > 0) {
     const lastCourse = allCourses.find(c => c.id === completedIds[completedIds.length-1]);
@@ -114,7 +79,7 @@ if (heroDiv && featured) {
   ];
 
   const container = document.getElementById('dashboardRows');
-  container.innerHTML = '';
+  if (container) container.innerHTML = '';
 
   for (const row of rowsDef) {
     let filtered = allCourses.filter(row.filter);
@@ -143,24 +108,25 @@ if (heroDiv && featured) {
       const card = createCourseCard(course, enrollment, userId, () => location.reload());
       scrollDiv.appendChild(card);
     }
-    container.appendChild(rowDiv);
+    container?.appendChild(rowDiv);
   }
 })();
-// Load Lottie animation for preloader
+
+// ----- Preloader with Lottie (optional) -----
 const loaderContainer = document.getElementById('lottieLoader');
-if (loaderContainer) {
-  const animation = lottie.loadAnimation({
+if (loaderContainer && typeof lottie !== 'undefined') {
+  lottie.loadAnimation({
     container: loaderContainer,
     renderer: 'svg',
     loop: true,
     autoplay: true,
-    path: '/assets/preloader.json'  // 👈 replace with your actual file path
+    path: '/assets/preloader.json'  // replace with your actual file path
   });
 }
 
-// Preloader with minimum display time (2.5 seconds)
+// Preloader minimum display time (2 seconds)
 let preloaderHidden = false;
-const MIN_DISPLAY_MS = 2000; // Change to 2000 for 2 seconds or 3000 for 3 seconds
+const MIN_DISPLAY_MS = 2000;
 const preloaderStartTime = Date.now();
 
 function hidePreloader() {
@@ -176,14 +142,14 @@ function hidePreloader() {
     preloaderHidden = true;
   }, remaining);
 }
-
-// Hide preloader when the page is fully loaded, but respect minimum time
 window.addEventListener('load', hidePreloader);
 
 // Scroll to top button
 const scrollBtn = document.getElementById('scrollTopBtn');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 300) scrollBtn.classList.remove('hidden');
-  else scrollBtn.classList.add('hidden');
-});
-scrollBtn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+if (scrollBtn) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) scrollBtn.classList.remove('hidden');
+    else scrollBtn.classList.add('hidden');
+  });
+  scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}

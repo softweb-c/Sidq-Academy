@@ -9,9 +9,9 @@ function seedInitialData() {
   // Users
   if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
     const users = [
-      { id: 'u1', email: 'admin@sidq.com', password: 'admin123', role: 'admin' },
-      { id: 'u2', email: 'user@sidq.com', password: 'user123', role: 'user' }
-    ];
+  { id: 'u1', name: 'Admin User', email: 'admin@sidq.com', password: 'admin123', role: 'admin' },
+  { id: 'u2', name: 'Regular User', email: 'user@sidq.com', password: 'user123', role: 'user' }
+];
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
   }
   
@@ -86,25 +86,25 @@ const mockApi = {
       const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS));
       const user = users.find(u => u.email === email && u.password === password);
       if (user) {
-        resolve({ id: user.id, email: user.email, role: user.role });
+        resolve({ id: user.id, name: user.name, email: user.email, role: user.role });
       } else {
         reject(new Error('Invalid email or password'));
       }
     }, 300);
   }),
-  register: (email, password) => new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS));
-      if (users.find(u => u.email === email)) {
-        reject(new Error('Email already exists'));
-        return;
-      }
-      const newUser = { id: 'u' + Date.now(), email, password, role: 'user' };
-      users.push(newUser);
-      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-      resolve({ id: newUser.id, email: newUser.email, role: 'user' });
-    }, 300);
-  }),
+  register: (name, email, password) => new Promise((resolve, reject) => {
+  setTimeout(() => {
+    const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS));
+    if (users.find(u => u.email === email)) {
+      reject(new Error('Email already exists'));
+      return;
+    }
+    const newUser = { id: 'u' + Date.now(), name, email, password, role: 'user' };
+    users.push(newUser);
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+    resolve({ id: newUser.id, name: newUser.name, email: newUser.email, role: 'user' });
+  }, 300);
+}),
   getCurrentUser: () => JSON.parse(localStorage.getItem('currentUser')),
   setCurrentUser: (user) => localStorage.setItem('currentUser', JSON.stringify(user)),
   logout: () => localStorage.removeItem('currentUser'),
