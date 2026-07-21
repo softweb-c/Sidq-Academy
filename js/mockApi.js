@@ -25,7 +25,7 @@ function seedInitialData() {
       'Cybersecurity', 'DevOps Pipeline', 'Mobile Flutter'
     ];
     
-    // ---------- MANUAL IMAGE MAPPING (edit these filenames as you like) ----------
+    // ---------- MANUAL IMAGE MAPPING ----------
     // Map each course ID (c1..c15) to the exact image filename in /assets/course-images/
     const imageMapping = {
       c1: 'c1.jpg',
